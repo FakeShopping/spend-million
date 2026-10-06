@@ -38,24 +38,7 @@ main{max-width:1280px;margin:auto;padding:38px 20px 80px}
 .products{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
 .product{background:var(--paper);border:1px solid #ebe5da;overflow:hidden;transition:transform .18s ease,box-shadow .18s ease}
 .product:hover{transform:translateY(-3px);box-shadow:0 10px 28px #00000012}
-.product-image{
-  width:100%;height:190px;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,#eee8dc,#faf7f0 55%,#e5ddd0);
-  position:relative;overflow:hidden;
-}
-.product-image::before{
-  content:"";position:absolute;width:150px;height:150px;border-radius:50%;
-  background:#ffffff55;top:-45px;right:-35px;
-}
-.product-image::after{
-  content:"";position:absolute;width:110px;height:110px;border-radius:50%;
-  background:#c9b18d18;bottom:-50px;left:-30px;
-}
-.visual-emoji{
-  position:relative;z-index:1;font-size:72px;line-height:1;
-  filter:drop-shadow(0 8px 10px #00000018);
-  text-align:center;letter-spacing:4px;
-}
+.product-image{width:100%;height:190px;object-fit:cover;display:block;background:#ddd;transition:transform .25s ease}.product:hover .product-image{transform:scale(1.02)}
 .product-info{padding:16px}
 .product-category{font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:#9a948b;margin-bottom:6px}
 .product-name{font-size:19px;line-height:1.15;margin-bottom:8px}
@@ -157,7 +140,7 @@ main{max-width:1280px;margin:auto;padding:38px 20px 80px}
 const STARTING_BALANCE=1000000;
 let balance=STARTING_BALANCE,purchases=[],currentFilter="All";
 
-const visualById={"1":"☕️🏢","2":"🏙️","3":"🌊🏠","4":"🌳🏡","5":"🏔️🏡","6":"🌊🏡","7":"🏙️✨","8":"🏡✨","9":"🏝️🏡","10":"🏰🏊","11":"🚗","12":"🔋🚗","13":"🚘","14":"🚙","15":"🏎️","16":"🚙","17":"🚘🕰️","18":"🏎️","19":"🏎️✨","20":"🏎️💨","21":"⌚️","22":"⌚️⌚️","23":"⌚️","24":"⌚️","25":"⌚️","26":"⌚️✨","27":"⌚️","28":"⌚️💎","29":"⌚️💎","30":"⌚️🏆","31":"🇮🇹✈️","32":"🇫🇷🥐","33":"🇬🇷🌊","34":"🏝️🌴","35":"🌴🏡","36":"🦁🌍","37":"🛥️🌊","38":"✈️🌍","39":"🛩️","40":"✈️🌍✨","41":"👕","42":"🕶️","43":"👟","44":"🧥","45":"👗✨","46":"👜","47":"👠💎","48":"👗","49":"👔👗🧥","50":"👗✨👜","51":"🎧","52":"📱","53":"💻","54":"🎮🖥️","55":"📷","56":"🎬🍿","57":"🏠📱","58":"🎮✨","59":"🎬🏠","60":"🖥️🔒","61":"☕️📅","62":"🍕👥","63":"🍣","64":"🍽️✨","65":"👨‍🍳","66":"👨‍🍳📅","67":"🍽️🥂","68":"🏝️🍽️","69":"👨‍🍳🍽️","70":"🍽️🏨","71":"🧖‍♀️","72":"🤿","73":"🎈","74":"🚁","75":"🏁🏎️","76":"🛥️","77":"🦁🚙","78":"🧭🏔️","79":"🚀","80":"🌍🧭","81":"💎","82":"🛥️✨","83":"🚁✨","84":"🛁✨","85":"🦖","86":"🥂⛲","87":"✈️✨","88":"🌊🚤","89":"🎨🖼️","90":"🏝️✨"};
+const imgs={"1":"https://loremflickr.com/900/700/coffee,apartment/all?lock=1","2":"https://loremflickr.com/900/700/city,studio,apartment/all?lock=2","3":"https://loremflickr.com/900/700/beach,apartment,ocean/all?lock=3","4":"https://loremflickr.com/900/700/countryside,cottage,house/all?lock=4","5":"https://loremflickr.com/900/700/mountain,cabin,house/all?lock=5","6":"https://loremflickr.com/900/700/seaside,house,ocean/all?lock=6","7":"https://loremflickr.com/900/700/modern,penthouse,apartment/all?lock=7","8":"https://loremflickr.com/900/700/luxury,villa,house,pool/all?lock=8","9":"https://loremflickr.com/900/700/private,island,bungalow/all?lock=9","10":"https://loremflickr.com/900/700/mansion,pool,luxury,house/all?lock=10","11":"https://loremflickr.com/900/700/used,city,car/all?lock=11","12":"https://loremflickr.com/900/700/electric,hatchback,car/all?lock=12","13":"https://loremflickr.com/900/700/BMW,5,series,sedan/all?lock=13","14":"https://loremflickr.com/900/700/Mercedes,G-Class/all?lock=14","15":"https://loremflickr.com/900/700/Porsche,911/all?lock=15","16":"https://loremflickr.com/900/700/Range,Rover/all?lock=16","17":"https://loremflickr.com/900/700/classic,Mercedes,car/all?lock=17","18":"https://loremflickr.com/900/700/Ferrari,sports,car/all?lock=18","19":"https://loremflickr.com/900/700/Lamborghini,sports,car/all?lock=19","20":"https://loremflickr.com/900/700/hypercar,sports,car/all?lock=20","21":"https://loremflickr.com/900/700/Swiss,wristwatch/all?lock=21","22":"https://loremflickr.com/900/700/Seiko,watch/all?lock=22","23":"https://loremflickr.com/900/700/Longines,watch/all?lock=23","24":"https://loremflickr.com/900/700/Tudor,Black,Bay,watch/all?lock=24","25":"https://loremflickr.com/900/700/Rolex,Submariner,watch/all?lock=25","26":"https://loremflickr.com/900/700/Cartier,Santos,watch/all?lock=26","27":"https://loremflickr.com/900/700/Omega,Speedmaster,watch/all?lock=27","28":"https://loremflickr.com/900/700/Patek,Philippe,watch/all?lock=28","29":"https://loremflickr.com/900/700/diamond,luxury,watch/all?lock=29","30":"https://loremflickr.com/900/700/rare,collector,luxury,watch/all?lock=30","31":"https://loremflickr.com/900/700/Rome,Italy,travel/all?lock=31","32":"https://loremflickr.com/900/700/Paris,France,travel/all?lock=32","33":"https://loremflickr.com/900/700/Greece,island,travel/all?lock=33","34":"https://loremflickr.com/900/700/Maldives,luxury,resort/all?lock=34","35":"https://loremflickr.com/900/700/Bali,villa,resort/all?lock=35","36":"https://loremflickr.com/900/700/Africa,safari,wildlife/all?lock=36","37":"https://loremflickr.com/900/700/private,yacht,ocean/all?lock=37","38":"https://loremflickr.com/900/700/first,class,airplane,travel/all?lock=38","39":"https://loremflickr.com/900/700/private,jet,aircraft/all?lock=39","40":"https://loremflickr.com/900/700/private,jet,world,travel/all?lock=40","41":"https://loremflickr.com/900/700/tshirt,clothing/all?lock=41","42":"https://loremflickr.com/900/700/designer,sunglasses/all?lock=42","43":"https://loremflickr.com/900/700/designer,sneakers/all?lock=43","44":"https://loremflickr.com/900/700/designer,coat,fashion/all?lock=44","45":"https://loremflickr.com/900/700/designer,outfit,fashion/all?lock=45","46":"https://loremflickr.com/900/700/luxury,handbag/all?lock=46","47":"https://loremflickr.com/900/700/diamond,shoes/all?lock=47","48":"https://loremflickr.com/900/700/couture,dress,fashion/all?lock=48","49":"https://loremflickr.com/900/700/luxury,wardrobe,clothes/all?lock=49","50":"https://loremflickr.com/900/700/luxury,fashion,collection/all?lock=50","51":"https://loremflickr.com/900/700/wireless,headphones/all?lock=51","52":"https://loremflickr.com/900/700/smartphone/all?lock=52","53":"https://loremflickr.com/900/700/MacBook,Pro,laptop/all?lock=53","54":"https://loremflickr.com/900/700/gaming,setup,computer/all?lock=54","55":"https://loremflickr.com/900/700/professional,camera,photography/all?lock=55","56":"https://loremflickr.com/900/700/home,cinema,theater/all?lock=56","57":"https://loremflickr.com/900/700/smart,home,technology/all?lock=57","58":"https://loremflickr.com/900/700/luxury,gaming,room/all?lock=58","59":"https://loremflickr.com/900/700/private,cinema,home/all?lock=59","60":"https://loremflickr.com/900/700/data,center,servers/all?lock=60","61":"https://loremflickr.com/900/700/coffee,cafe/all?lock=61","62":"https://loremflickr.com/900/700/pizza,party,food/all?lock=62","63":"https://loremflickr.com/900/700/sushi,omakase/all?lock=63","64":"https://loremflickr.com/900/700/Michelin,dinner,restaurant/all?lock=64","65":"https://loremflickr.com/900/700/private,chef,cooking/all?lock=65","66":"https://loremflickr.com/900/700/private,chef,restaurant/all?lock=66","67":"https://loremflickr.com/900/700/tasting,menu,fine,dining/all?lock=67","68":"https://loremflickr.com/900/700/private,island,dinner/all?lock=68","69":"https://loremflickr.com/900/700/chefs,table,fine,dining/all?lock=69","70":"https://loremflickr.com/900/700/private,restaurant,dining/all?lock=70","71":"https://loremflickr.com/900/700/luxury,spa,wellness/all?lock=71","72":"https://loremflickr.com/900/700/scuba,diving,coral,reef/all?lock=72","73":"https://loremflickr.com/900/700/hot,air,balloon/all?lock=73","74":"https://loremflickr.com/900/700/helicopter,tour/all?lock=74","75":"https://loremflickr.com/900/700/Formula,1,racing/all?lock=75","76":"https://loremflickr.com/900/700/private,yacht,day/all?lock=76","77":"https://loremflickr.com/900/700/private,safari,Africa/all?lock=77","78":"https://loremflickr.com/900/700/luxury,expedition,adventure/all?lock=78","79":"https://loremflickr.com/900/700/zero,gravity,flight/all?lock=79","80":"https://loremflickr.com/900/700/world,expedition,adventure/all?lock=80","81":"https://loremflickr.com/900/700/diamond,gemstone/all?lock=81","82":"https://loremflickr.com/900/700/luxury,yacht/all?lock=82","83":"https://loremflickr.com/900/700/luxury,helicopter/all?lock=83","84":"https://loremflickr.com/900/700/gold,bathtub,luxury,bathroom/all?lock=84","85":"https://loremflickr.com/900/700/dinosaur,skeleton,museum/all?lock=85","86":"https://loremflickr.com/900/700/champagne,fountain,tower/all?lock=86","87":"https://loremflickr.com/900/700/private,jet,luxury,interior/all?lock=87","88":"https://loremflickr.com/900/700/personal,submarine/all?lock=88","89":"https://loremflickr.com/900/700/art,collection,gallery/all?lock=89","90":"https://loremflickr.com/900/700/private,island,tropical/all?lock=90"};
 
 const products=[
 /* REAL ESTATE */
@@ -267,7 +250,7 @@ const products=[
 [88,"Personal submarine",180000,"Luxury & Ridiculous","yacht"],
 [89,"Art collection",300000,"Luxury & Ridiculous","luxury"],
 [90,"Private island",700000,"Luxury & Ridiculous","beach"]
-].map(([id,name,price,category,img])=>({id,name,price,category,visual:visualById[id]}));
+].map(([id,name,price,category,img])=>({id,name,price,category,image:imgs[img]}));
 
 const categories=["All",...new Set(products.map(p=>p.category))];
 
@@ -285,7 +268,7 @@ function renderProducts(){
   if(!list.length){box.innerHTML='<div class="empty-products">Nothing found. Try another search.</div>';return}
   box.innerHTML=list.map(p=>`
     <article class="product">
-      <div class="product-image" role="img" aria-label="${p.name}"><div class="visual-emoji">${p.visual}</div></div>
+      <img class="product-image" src="${p.image}" alt="${p.name}" loading="lazy" onerror="this.onerror=null;this.src='https://loremflickr.com/900/700/shopping,luxury/all?lock='+p.id">
       <div class="product-info">
         <div class="product-category">${p.category}</div>
         <div class="product-name">${p.name}</div>
