@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Spend €1 Million</title>
+
+<style>
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, Helvetica, sans-serif;
+        background: #f5f2ed;
+        color: #1d1d1b;
+        min-height: 100vh;
+    }
+
+    header {
+        background: #1d1d1b;
+        color: white;
+        padding: 28px 20px;
+        text-align: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    header h1 {
+        font-family: Georgia, serif;
+        font-size: 32px;
+        font-weight: 400;
+        margin-bottom: 18px;
+    }
+
+    .money-container {
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+    .money-label {
+        font-size: 12px;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        opacity: 0.7;
+        margin-bottom: 5px;
+    }
+
+    #balance {
+        font-family: Georgia, serif;
+        font-size: 42px;
+        font-weight: bold;
+    }
+
+    .stats {
+        display: flex;
+        justify-content: center;
+        gap: 50px;
+        margin-top: 12px;
+        font-size: 14px;
+    }
+
+    .progress-container {
+        max-width: 700px;
+        height: 7px;
+        background: #555;
+        border-radius: 10px;
+        margin: 18px auto 0;
+        overflow: hidden;
+    }
+
+    #progress {
+        height: 100%;
+        width: 0%;
+        background: #d8c3a5;
+        transition: width 0.4s ease;
+    }
+
+    .main {
+        max-width: 1250px;
+        margin: 0 auto;
+        padding: 40px 20px 80px;
+    }
+
+    .intro {
+        text-align: center;
+        margin-bottom: 35px;
+    }
+
+    .intro h2 {
+        font-family: Georgia, serif;
+        font-size: 28px;
+        font-weight: 400;
+        margin-bottom: 8px;
+    }
+
+    .intro p {
+        color: #666;
+        font-size: 15px;
+    }
+
+    .categories {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 35px;
+    }
+
+    .category-btn {
+        border: 1px solid #ccc;
+        background: white;
+        padding: 10px 18px;
+        border-radius: 30px;
+        cursor: pointer;
+        font-size: 13px;
+        transition: all 0.2s ease;
+    }
+
+    .category-btn:hover,
+    .category-btn.active {
+        background: #1d1d1b;
+        color: white;
+        border-color: #1d1d1b;
+    }
+
+    .products {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 22px;
+    }
+
+    .product {
+        background: white;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.06);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .product:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 25px rgba(0,0,0,0.10);
+    }
+
+    .product-image {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .product-info {
+        padding: 18px;
+    }
+
+    .product-category {
+        font-size: 10px;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        color: #999;
+        margin-bottom: 7px;
+    }
+
+    .product-name {
+        font-family: Georgia, serif;
+        font-size: 20px;
+        margin-bottom: 8px;
+    }
+
+    .product-price {
+        font-size: 17px;
+        font-weight: bold;
+        margin-bottom: 15px;
+    }
+
+    .buy-btn {
+        width: 100%;
+        border: none;
+        background: #1d1d1b;
+        color: white;
+        padding: 12px;
+        cursor: pointer;
+        font-size: 12px;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        transition: background 0.2s ease;
+    }
+
+    .buy-btn:hover {
+        background: #444;
+    }
+
+    .buy-btn:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+    }
+
+    .bottom-section {
+        margin-top: 60px;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 25px;
+    }
+
+    .panel {
+        background: white;
+        padding: 25px;
+        border-radius: 4px;
+        box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+    }
+
+    .panel h3 {
+        font-family: Georgia, serif;
+        font-size: 23px;
+        font-weight: 400;
+        margin-bottom: 20px;
+    }
+
+    #history {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+
+    .history-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+        padding: 12px 0;
+        gap: 10px;
+    }
+
+    .history-name {
+        font-size: 14px;
+    }
+
+    .history-price {
+        font-weight: bold;
+        font-size: 13px;
+    }
+
+    .undo-btn {
+        border: 1px solid #ddd;
+        background: white;
+        padding: 5px 9px;
+        font-size: 11px;
+        cursor: pointer;
+    }
+
+    .undo-btn:hover {
+        background: #f3f3f3;
+    }
+
+    .empty-history {
+        color: #999;
+        font-size: 14px;
+    }
+
+    .reset-btn {
+        border: 1px solid #1d1d1b;
+        background: transparent;
+        padding: 12px 20px;
+        cursor: pointer;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 15px;
+    }
+
+    .reset-btn:hover {
+        background: #1d1d1b;
+        color: white;
+    }
+
+    .message {
+        position: fixed;
+        bottom: 25px;
+        left: 50%;
+        transform: translateX(-50%) translateY(100px);
+        background: #1d1d1b;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 4px;
+        font-size: 14px;
+        z-index: 200;
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .message.show {
+        transform: translateX(-50%) translateY(0);
+        opacity: 1;
+    }
+
+    .victory {
+        display: none;
+        position: fixed;
+        inset: 0;
+        background: rgba(29,29,27,0.96);
+        color: white;
+        z-index: 500;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 30px;
+    }
+
+    .victory-content {
+        max-width: 600px;
+    }
+
+    .victory h2 {
+        font-family: Georgia, serif;
+        font-size: 60px;
+        font-weight: 400;
+        margin-bottom: 20px;
+    }
+
+    .victory p {
+        color: #ddd;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .victory button {
+        background: white;
+        color: #1d1d1b;
+        border: none;
+        padding: 14px 28px;
+        cursor: pointer;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    @media (max-width: 900px) {
+        .products {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+
+    @media (max-width: 650px) {
+        header {
+            padding: 20px 15px;
+        }
+
+        header h1 {
+            font-size: 25px;
+        }
+
+        #balance {
+            font-size: 32px;
+        }
+
+        .stats {
+            gap: 25px;
+        }
+
+        .main {
+            padding: 30px 15px 60px;
+        }
+
+        .products {
+            grid-template-columns: 1fr;
+        }
+
+        .product-image {
+            height: 230px;
+        }
+
+        .bottom-section {
+            grid-template-columns: 1fr;
+        }
+
+        .victory h2 {
+            font-size: 42px;
+        }
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Spend €1 Million</h1>
+
+    <div class="money-container">
+        <div class="money-label">Remaining</div>
+        <div id="balance">€1,000,000</div>
+
+        <div class="stats">
+            <div>
+                <span>Spent:</span>
+                <strong id="spent">€0</strong>
+            </div>
+
+            <div>
+                <span>Progress:</span>
+                <strong id="percentage">0%</strong>
+            </div>
+        </div>
+
+        <div class="progress-container">
+            <div id="progress"></div>
+        </div>
+    </div>
+</header>
+
+
+<main class="main">
+
+    <div class="intro">
+        <h2>What would you buy?</h2>
+        <p>You have €1,000,000. Spend every last euro without going over.</p>
+    </div>
+
+
+    <div class="categories">
+
+        <button class="category-btn active" onclick="filterProducts('All', this)">
+            All
+        </button>
+
+        <button class="category-btn" onclick="filterProducts('Real Estate', this)">
+            🏠 Real Estate
+        </button>
+
+        <button class="category-btn" onclick="filterProducts('Cars', this)">
+            🚗 Cars
+        </button>
+
+        <button class="category-btn" onclick="filterProducts('Watches', this)">
+            ⌚ Watches
+        </button>
+
+        <button class="category-btn" onclick="filterProducts('Travel', this)">
+            ✈️ Travel
+        </button>
+
+        <button class="category-btn" onclick="filterProducts('Fashion', this)">
+            👗 Fashion
+        </button>
+
+        <button class="category-btn" onclick="filterProducts('Technology', this)">
+            💻 Technology
+        </button>
+
+        <button class="category-btn" onclick="filterProducts('Food', this)">
+            🍽 Food
+        </button>
+
+        <button class="category-btn" onclick="filterProducts('Experiences', this)">
+            🌴 Experiences
+        </button>
+
+        <button class="category-btn" onclick="filterProducts('Luxury', this)">
+            💎 Luxury
+        </button>
+
+    </div>
+
+
+    <div class="products" id="products"></div>
+
+
+    <div class="bottom-section">
+
+        <div class="panel">
+
+            <h3>Your purchases</h3>
+
+            <div id="history">
+                <div class="empty-history">
+                    You haven't bought anything yet.
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="panel">
+
+            <h3>Your challenge</h3>
+
+            <p style="color:#666; line-height:1.6; font-size:14px;">
+                Spend exactly €1,000,000.
+                You can't spend more than your balance.
+                Can you get all the way to €0?
+            </p>
+
+            <button class="reset-btn" onclick="resetGame()">
+                ↻ Start over
+            </button>
+
+        </div>
+
+    </div>
+
+</main>
+
+
+<div class="message" id="message"></div>
+
+
+<div class="victory" id="victory">
+
+    <div class="victory-content">
+
+        <h2>You did it.</h2>
+
+        <p>
+            You managed to spend exactly €1,000,000
+            without going over.
+            <br><br>
+            Not a single euro left.
+        </p>
+
+        <button onclick="resetGame()">
+            Play again
+        </button>
+
+    </div>
+
+</div>
+
+
+<script>
+
+const STARTING_BALANCE = 1000000;
+
+let balance = STARTING_BALANCE;
+let purchases = [];
+let currentFilter = "All";
+
+
+const products = [
+
+    // REAL ESTATE
+
+    {
+        id: 1,
+        name: "Beach Apartment",
+        price: 180000,
+        category: "Real Estate",
+        image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 2,
+        name: "Luxury Villa",
+        price: 450000,
+        category: "Real Estate",
+        image: "https://images.unsplash.com/photo-1613490493576-7fde63acd811?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 3,
+        name: "Mountain Cabin",
+        price: 250000,
+        category: "Real Estate",
+        image: "https://images.unsplash.com/photo-1449158743715-0a90ebb6d2d8?auto=format&fit=crop&w=900&q=80"
+    },
+
+
+    // CARS
+
+    {
+        id: 4,
+        name: "Porsche 911",
+        price: 140000,
+        category: "Cars",
+        image: "https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 5,
+        name: "Ferrari",
+        price: 300000,
+        category: "Cars",
+        image: "https://images.unsplash.com/photo-1592198084033-aade902d1aae?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 6,
+        name: "Classic Mercedes",
+        price: 85000,
+        category: "Cars",
+        image: "https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=900&q=80"
+    },
+
+
+    // WATCHES
+
+    {
+        id: 7,
+        name: "Rolex Submariner",
+        price: 15000,
+        category: "Watches",
+        image: "https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 8,
+        name: "Luxury Swiss Watch",
+        price: 45000,
+        category: "Watches",
+        image: "https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 9,
+        name: "Diamond Watch",
+        price: 120000,
+        category: "Watches",
+        image: "https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=900&q=80"
+    },
+
+
+    // TRAVEL
+
+    {
+        id: 10,
+        name: "Maldives Luxury Holiday",
+        price: 25000,
+        category: "Travel",
+        image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 11,
+        name: "Private Jet Charter",
+        price: 75000,
+        category: "Travel",
+        image: "https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 12,
+        name: "Round-the-World Trip",
+        price: 50000,
+        category: "Travel",
+        image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=900&q=80"
+    },
+
+
+    // FASHION
+
+    {
+        id: 13,
+        name: "Designer Outfit",
+        price: 8000,
+        category: "Fashion",
+        image: "https://images.unsplash.com/photo-1445205170230-053b83016050?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 14,
+        name: "Luxury Handbag",
+        price: 12000,
+        category: "Fashion",
+        image: "https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 15,
+        name: "Diamond Shoes",
+        price: 30000,
+        category: "Fashion",
+        image: "https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=900&q=80"
+    },
+
+
+    // TECHNOLOGY
+
+    {
+        id: 16,
+        name: "MacBook Pro",
+        price: 3500,
+        category: "Technology",
+        image: "https://images.unsplash.com/photo-1517336714739-489689fd1ca8?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 17,
+        name: "Home Cinema",
+        price: 25000,
+        category: "Technology",
+        image: "https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 18,
+        name: "Gaming Setup",
+        price: 10000,
+        category: "Technology",
+        image: "https://images.unsplash.com/photo-1593305841991-05c297ba4575?auto=format&fit=crop&w=900&q=80"
+    },
+
+
+    // FOOD
+
+    {
+        id: 19,
+        name: "Michelin Dinner",
+        price: 1200,
+        category: "Food",
+        image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 20,
+        name: "Private Chef",
+        price: 5000,
+        category: "Food",
+        image: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 21,
+        name: "Sushi Omakase",
+        price: 800,
+        category: "Food",
+        image: "https://images.unsplash.com/photo-1579871494447-9811cf80d66c?auto=format&fit=crop&w=900&q=80"
+    },
+
+
+    // EXPERIENCES
+
+    {
+        id: 22,
+        name: "Private Yacht Day",
+        price: 15000,
+        category: "Experiences",
+        image: "https://images.unsplash.com/photo-1569263979104-865ab7cd8d13?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 23,
+        name: "Formula 1 Weekend",
+        price: 10000,
+        category: "Experiences",
+        image: "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 24,
+        name: "Scuba Diving Trip",
+        price: 4000,
+        category: "Experiences",
+        image: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?auto=format&fit=crop&w=900&q=80"
+    },
+
+
+    // LUXURY
+
+    {
+        id: 25,
+        name: "Diamond",
+        price: 50000,
+        category: "Luxury",
+        image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 26,
+        name: "Luxury Yacht",
+        price: 250000,
+        category: "Luxury",
+        image: "https://images.unsplash.com/photo-1540946485063-a40da27545f8?auto=format&fit=crop&w=900&q=80"
+    },
+
+    {
+        id: 27,
+        name: "Helicopter",
+        price: 350000,
+        category: "Luxury",
+        image: "https://images.unsplash.com/photo-1521727857535-28d2040117e6?auto=format&fit=crop&w=900&q=80"
+    }
+
+];
+
+
+function formatMoney(amount) {
+    return "€" + amount.toLocaleString("en-US");
+}
+
+
+function renderProducts() {
+
+    const container = document.getElementById("products");
+
+    container.innerHTML = "";
+
+    const filteredProducts = currentFilter === "All"
+        ? products
+        : products.filter(product => product.category === currentFilter);
+
+
+    filteredProducts.forEach(product => {
+
+        const alreadyBought = purchases.some(
+            purchase => purchase.productId === product.id
+        );
+
+        const card = document.createElement("div");
+
+        card.className = "product";
+
+        card.innerHTML = `
+            <img
+                class="product-image"
+                src="${product.image}"
+                alt="${product.name}"
+            >
+
+            <div class="product-info">
+
+                <div class="product-category">
+                    ${product.category}
+                </div>
+
+                <div class="product-name">
+                    ${product.name}
+                </div>
+
+                <div class="product-price">
+                    ${formatMoney(product.price)}
+                </div>
+
+                <button
+                    class="buy-btn"
+                    onclick="buyProduct(${product.id})"
+                    ${balance < product.price ? "disabled" : ""}
+                >
+                    ${balance < product.price ? "Too expensive" : "Buy"}
+                </button>
+
+            </div>
+        `;
+
+        container.appendChild(card);
+
+    });
+
+}
+
+
+function buyProduct(productId) {
+
+    const product = products.find(
+        product => product.id === productId
+    );
+
+    if (!product) return;
+
+
+    if (product.price > balance) {
+
+        showMessage(
+            "You don't have enough money for this."
+        );
+
+        return;
+    }
+
+
+    balance -= product.price;
+
+
+    purchases.push({
+        id: Date.now() + Math.random(),
+        productId: product.id,
+        name: product.name,
+        price: product.price
+    });
+
+
+    updateDisplay();
+
+    showMessage(
+        `${product.name} purchased for ${formatMoney(product.price)}`
+    );
+
+
+    if (balance === 0) {
+
+        setTimeout(() => {
+
+            document.getElementById("victory").style.display = "flex";
+
+        }, 500);
+
+    }
+
+}
+
+
+function undoPurchase(purchaseId) {
+
+    const index = purchases.findIndex(
+        purchase => purchase.id === purchaseId
+    );
+
+    if (index === -1) return;
+
+
+    const purchase = purchases[index];
+
+    balance += purchase.price;
+
+    purchases.splice(index, 1);
+
+    updateDisplay();
+
+    showMessage(
+        `${purchase.name} returned`
+    );
+
+}
+
+
+function updateDisplay() {
+
+    document.getElementById("balance").textContent =
+        formatMoney(balance);
+
+
+    const spent = STARTING_BALANCE - balance;
+
+    document.getElementById("spent").textContent =
+        formatMoney(spent);
+
+
+    const percentage =
+        (spent / STARTING_BALANCE) * 100;
+
+
+    document.getElementById("percentage").textContent =
+        percentage.toFixed(1) + "%";
+
+
+    document.getElementById("progress").style.width =
+        percentage + "%";
+
+
+    renderProducts();
+
+    renderHistory();
+
+}
+
+
+function renderHistory() {
+
+    const history = document.getElementById("history");
+
+    if (purchases.length === 0) {
+
+        history.innerHTML = `
+            <div class="empty-history">
+                You haven't bought anything yet.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    history.innerHTML = "";
+
+
+    [...purchases].reverse().forEach(purchase => {
+
+        const item = document.createElement("div");
+
+        item.className = "history-item";
+
+
+        item.innerHTML = `
+
+            <div>
+
+                <div class="history-name">
+                    ${purchase.name}
+                </div>
+
+                <div class="history-price">
+                    ${formatMoney(purchase.price)}
+                </div>
+
+            </div>
+
+            <button
+                class="undo-btn"
+                onclick="undoPurchase(${purchase.id})"
+            >
+                Undo
+            </button>
+
+        `;
+
+
+        history.appendChild(item);
+
+    });
+
+}
+
+
+function filterProducts(category, button) {
+
+    currentFilter = category;
+
+
+    document
+        .querySelectorAll(".category-btn")
+        .forEach(btn => btn.classList.remove("active"));
+
+
+    button.classList.add("active");
+
+
+    renderProducts();
+
+}
+
+
+function showMessage(text) {
+
+    const message =
+        document.getElementById("message");
+
+
+    message.textContent = text;
+
+    message.classList.add("show");
+
+
+    setTimeout(() => {
+
+        message.classList.remove("show");
+
+    }, 2500);
+
+}
+
+
+function resetGame() {
+
+    balance = STARTING_BALANCE;
+
+    purchases = [];
+
+    currentFilter = "All";
+
+
+    document
+        .querySelectorAll(".category-btn")
+        .forEach(btn => btn.classList.remove("active"));
+
+
+    document
+        .querySelector(".category-btn")
+        .classList.add("active");
+
+
+    document.getElementById("victory").style.display = "none";
+
+
+    updateDisplay();
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+}
+
+
+renderProducts();
+
+updateDisplay();
+
+</script>
+
+</body>
+</html>
